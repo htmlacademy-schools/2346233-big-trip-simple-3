@@ -24,6 +24,8 @@ function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+const isEsc = (evt) => evt.key === 'Escape';
+
 const getItemFromItemsById = (items, id) => (items.find((item) => item.id === id));
 
 const getDateWithoutT = (dateStr) => dateStr.substring(0, dateStr.indexOf('T'));
@@ -32,4 +34,4 @@ const getDateWithT = (dateStr) => dateStr.substring(0, dateStr.lastIndexOf(':'))
 const getTime = (dateStr) => dayjs(dateStr).format(EVENT_TIME_FORMAT);
 const getDateYears = (date) => dayjs(date).format(EVENT_YEARS_FORMAT);
 
-export {getRandomItemFromItems, getRandomPrice, getRandomSliceFromItems, getRandomId, createIDgenerator, getRandomArrayElement,getDateWithoutT, getDateDayAndMo, getDateWithT, getTime, getItemFromItemsById, getDateYears};
+export {getRandomItemFromItems, getRandomPrice, getRandomSliceFromItems, getRandomId, createIDgenerator, getRandomArrayElement,getDateWithoutT, getDateDayAndMo, getDateWithT, getTime, getItemFromItemsById, getDateYears, isEsc};
