@@ -10,10 +10,8 @@ function createOffersTemplate(offerIds,type) {
       <span class="event__offer-title">${oneOffer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${oneOffer.price}</span>
-    </li>
-  
-  `}).join('');
-
+    </li>`;
+  }).join('');
 }
 
 function createEventItemTemplate(oneWaypoint) {
