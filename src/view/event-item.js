@@ -4,7 +4,7 @@ import {getDateDayAndMo, getDateWithoutT, getDateWithT, getTime} from '../util';
 import {getOfferById} from '../mock/offer';
 
 function createOffersTemplate(offerIds,type) {
-  return offers.map((offerId) => {
+  return offerIds.map((offerId) => {
     const oneOffer = getOfferById(type, offerId);
     return `<li class="event__offer">
       <span class="event__offer-title">${oneOffer.title}</span>
