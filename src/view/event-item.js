@@ -47,20 +47,23 @@ function createEventItemTemplate(oneWaypoint) {
 }
 
 export default class EventItemView {
-  constructor({oneWaypoint}) {
-    this.oneWaypoint = oneWaypoint;
+  #element = null;
+  #oneWaypoint = null;
+
+  constructor(oneWaypoint) {
+    this.#oneWaypoint = oneWaypoint;
   }
 
-  getTemplate() {
-    return createEventItemTemplate(this.oneWaypoint);
+  get template() {
+    return createEventItemTemplate(this.#oneWaypoint);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
