@@ -1,4 +1,3 @@
-import CreationForm from '../view/creation-form';
 import Sorting from '../view/sorting';
 import EventList from '../view/event-list';
 import NoWaypointMessage from '../view/no-waypoints';
@@ -6,6 +5,8 @@ import {render, RenderPosition} from '../framework/render';
 import WaypointPresenter from './waypoint-presenter';
 import {SortType} from '../mock/consts';
 import {sorts} from '../mock/sort';
+import {updateWaypoint} from '../util';
+import EditingForm from '../view/edit-form';
 
 export default class BoardPresenter {
   #waypointListComponent = new EventList();
@@ -14,20 +15,28 @@ export default class BoardPresenter {
   #waypointPresenter = new Map();
   #currentSortType = SortType.DAY;
   #sourcedWaypoints = [];
+  #offers = [];
+  #destinations = [];
 
   #boardContainer = null;
   #waypointsModel = null;
   #waypoints = null;
+  #modelOffers = null;
+  #modelDestinations = null;
 
-  constructor({boardContainer,waypointsModel}) {
+  constructor({boardContainer, waypointsModel, modelOffers, modelDestinations}) {
     this.#boardContainer = boardContainer;
     this.#waypointsModel = waypointsModel;
+    this.#modelOffers = modelOffers;
+    this.#modelDestinations = modelDestinations;
   }
 
   init() {
-    this.#waypoints = [...this.#waypointsModel.arrWaypoints];
+    this.#waypoints = [...this.#waypointsModel.waypoints];
+    this.#offers = [...this.#modelOffers.offers];
+    this.#destinations = [...this.#modelDestinations.destinations];
     this.#renderBoard();
-    this.#sourcedWaypoints = [...this.#waypointsModel.arrWaypoints];
+    this.#sourcedWaypoints = [...this.#waypointsModel.waypoints];
   }
 
   #renderSort() {
@@ -46,7 +55,10 @@ export default class BoardPresenter {
   #renderWaypoint(waypoint) {
     const waypointPresenter = new WaypointPresenter({
       waypointList: this.#waypointListComponent.element,
-      onModeChange: this.#handleModeChange
+      offers: this.#offers,
+      destinations: this.#destinations,
+      onDataChange: this.#handleWaypointChange,
+      onModeChange: this.#handleModeChange,
     });
 
     waypointPresenter.init(waypoint);
@@ -69,7 +81,11 @@ export default class BoardPresenter {
     }
     this.#renderSort();
 
-    render(new CreationForm(this.#waypoints[0]), this.#waypointListComponent.element);
+    render(new EditingForm({
+      destinations: this.#destinations,
+      offers: this.#offers,
+      isEditForm: false
+    }), this.#waypointListComponent.element);
     this.#renderWaypointsList();
   }
 
@@ -94,5 +110,10 @@ export default class BoardPresenter {
     this.#sortWaypoints(sortType);
     this.#clearWaypointList();
     this.#renderWaypointsList();
+  };
+
+  #handleWaypointChange = (updatedWaypoint) => {
+    this.#waypoints = updateWaypoint(this.#waypoints, updatedWaypoint);
+    this.#waypointPresenter.get(updatedWaypoint.id).init(updatedWaypoint, this.#destinations, this.#offers);
   };
 }
