@@ -1,7 +1,7 @@
-import {createElement} from '../render.js';
 import {getDestinationByID} from '../mock/destination';
 import {getDateDayAndMo, getDateWithoutT, getDateWithT, getTime} from '../util';
 import {getOfferById} from '../mock/offer';
+import AbstractView from '../framework/view/abstract-view';
 
 function createOffersTemplate(offerIds,type) {
   return offerIds.map((offerId) => {
@@ -46,27 +46,24 @@ function createEventItemTemplate(oneWaypoint) {
   );
 }
 
-export default class EventItemView {
-  #element = null;
+export default class EventItemView extends AbstractView {
   #oneWaypoint = null;
+  #handleClick = null;
 
-  constructor(oneWaypoint) {
+  constructor({oneWaypoint, onClick}) {
+    super();
     this.#oneWaypoint = oneWaypoint;
+    this.#handleClick = onClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
   get template() {
     return createEventItemTemplate(this.#oneWaypoint);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick();
+  };
 }
