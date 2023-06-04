@@ -28,10 +28,16 @@ const isEsc = (evt) => evt.key === 'Escape';
 
 const getItemFromItemsById = (items, id) => (items.find((item) => item.id === id));
 
+const isTripDateBeforeToday = (date) => dayjs(date).isBefore(dayjs(), 'D') || dayjs(date).isSame(dayjs(), 'D');
+
+const changeType = (type) => type.charAt(0).toUpperCase() + type.slice(1);
+
 const getDateWithoutT = (dateStr) => dateStr.substring(0, dateStr.indexOf('T'));
 const getDateDayAndMo = (dateStr )=> dayjs(dateStr).format(EVENT_DATE_FORMAT);
 const getDateWithT = (dateStr) => dateStr.substring(0, dateStr.lastIndexOf(':'));
 const getTime = (dateStr) => dayjs(dateStr).format(EVENT_TIME_FORMAT);
 const getDateYears = (date) => dayjs(date).format(EVENT_YEARS_FORMAT);
 
-export {getRandomItemFromItems, getRandomPrice, getRandomSliceFromItems, getRandomId, createIDgenerator, getRandomArrayElement,getDateWithoutT, getDateDayAndMo, getDateWithT, getTime, getItemFromItemsById, getDateYears, isEsc};
+export {getRandomItemFromItems, getRandomPrice, getRandomSliceFromItems, getRandomId, createIDgenerator,
+  getRandomArrayElement,getDateWithoutT, getDateDayAndMo, getDateWithT, getTime, getItemFromItemsById, getDateYears, isEsc,changeType,
+  isTripDateBeforeToday};
