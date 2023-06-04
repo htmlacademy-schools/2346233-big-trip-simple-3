@@ -3,9 +3,9 @@ import EditingForm from '../view/edit-form';
 import Sorting from '../view/sorting';
 import EventItem from '../view/event-item';
 import EventList from '../view/event-list';
-import {render} from '../render';
 import {isEsc} from '../util';
 import NoWaypointMessage from '../view/no-waypoints';
+import {render, replace} from '../framework/render';
 
 export default class BoardPresenter {
   #waypointListComponent = null;
@@ -28,7 +28,7 @@ export default class BoardPresenter {
       this.#waypointListComponent = new EventList();
       render(this.#waypointListComponent, this.#boardContainer);
       render(new CreationForm(), this.#waypointListComponent.element);
-      this.#renderWaypoint(waypoints[0]);
+
       for (let i = 1; i < 4; i++) {
         this.#renderWaypoint(waypoints[i]);
       }
@@ -36,42 +36,36 @@ export default class BoardPresenter {
   }
 
   #renderWaypoint(waypoint) {
-    const waypointComponent = new EventItem(waypoint);
-    const formComponent = new EditingForm(waypoint);
-
-    const replaceFormToWaypoint = () => {
-      this.#waypointListComponent.element.replaceChild(waypointComponent.element, formComponent.element);
-    };
-
-    const replaceWaypointToForm = () => {
-      this.#waypointListComponent.element.replaceChild(formComponent.element, waypointComponent.element);
-    };
-
-    waypointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
-      replaceWaypointToForm();
-      document.body.addEventListener('keydown', closeOnEsc);
-    });
-
-    formComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
-      replaceFormToWaypoint();
-      document.body.removeEventListener('keydown', closeOnEsc);
-    });
-
-    function closeOnEsc(evt) {
+    const ecsHandler = (evt) => {
       if (isEsc(evt)) {
         evt.preventDefault();
         replaceFormToWaypoint();
-        document.body.removeEventListener('keydown', closeOnEsc);
+        document.body.removeEventListener('keydown', ecsHandler);
       }
+    };
+
+    const waypointComponent = new EventItem({
+      oneWaypoint: waypoint,
+      onClick: () => {
+        replaceWaypointToForm.call(this);
+        document.body.addEventListener('keydown', ecsHandler);
+      }
+    });
+    const formComponent = new EditingForm({
+      oneWaypoint: waypoint,
+      onSubmit: () => {
+        replaceFormToWaypoint.call(this);
+        document.body.removeEventListener('keydown', ecsHandler);
+      }
+    });
+
+    function replaceFormToWaypoint() {
+      replace(waypointComponent, formComponent);
     }
 
-    formComponent.element.querySelector('.event').addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      replaceFormToWaypoint();
-      document.body.removeEventListener('keydown', closeOnEsc);
-    });
+    function replaceWaypointToForm(){
+      replace(formComponent, waypointComponent);
+    }
 
     render(waypointComponent, this.#waypointListComponent.element);
   }
