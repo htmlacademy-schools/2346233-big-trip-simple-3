@@ -38,6 +38,10 @@ const getDateWithT = (dateStr) => dateStr.substring(0, dateStr.lastIndexOf(':'))
 const getTime = (dateStr) => dayjs(dateStr).format(EVENT_TIME_FORMAT);
 const getDateYears = (date) => dayjs(date).format(EVENT_YEARS_FORMAT);
 
+const updateWaypoint = (items, update) => items.map((item) => item.id === update.id ? update : item);
+
+const makeFirstLetterUpperCase = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+
 export {getRandomItemFromItems, getRandomPrice, getRandomSliceFromItems, getRandomId, createIDgenerator,
   getRandomArrayElement,getDateWithoutT, getDateDayAndMo, getDateWithT, getTime, getItemFromItemsById, getDateYears, isEsc,changeType,
-  isTripDateBeforeToday};
+  isTripDateBeforeToday, updateWaypoint, makeFirstLetterUpperCase};
