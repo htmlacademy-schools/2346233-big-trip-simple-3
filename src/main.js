@@ -25,4 +25,3 @@ const boardPresenter = new BoardPresenter({
 
 render(new Filters(), siteHeaderElement);
 boardPresenter.init();
-// eslint-disable-next-line
