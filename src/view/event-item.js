@@ -1,21 +1,22 @@
-import {getDestinationByID} from '../mock/destination';
 import {getDateDayAndMo, getDateWithoutT, getDateWithT, getTime} from '../util';
-import {getOfferById} from '../mock/offer';
 import AbstractView from '../framework/view/abstract-view';
+import { getItemFromItemsById } from '../util';
 
-function createOffersTemplate(offerIds,type) {
-  return offerIds.map((offerId) => {
-    const oneOffer = getOfferById(type, offerId);
-    return `<li class="event__offer">
-      <span class="event__offer-title">${oneOffer.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${oneOffer.price}</span>
-    </li>`;
-  }).join('');
+function createOffersTemplate(selectedOffersIDs, offers, type) {
+  const currentTypeOffers = offers.find((el) => el.type === type).offers;
+  return currentTypeOffers.filter((offer) => selectedOffersIDs.includes(offer.id))
+    .map((offer) => `
+      <li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>`)
+    .join('');
 }
 
-function createEventItemTemplate(oneWaypoint) {
-  const itemDest = getDestinationByID(oneWaypoint.destination);
+function createEventItemTemplate(oneWaypoint, destinations, offers) {
+
+  const itemDest = getItemFromItemsById(destinations, oneWaypoint.destination);
   return (
     `<li class="trip-events__item">
     <div class="event">
@@ -36,7 +37,7 @@ function createEventItemTemplate(oneWaypoint) {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-      ${createOffersTemplate(oneWaypoint.offersIDs, oneWaypoint.type)}
+      ${createOffersTemplate(oneWaypoint.offersIDs, offers, oneWaypoint.type)}
       </ul>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
@@ -49,17 +50,21 @@ function createEventItemTemplate(oneWaypoint) {
 export default class EventItemView extends AbstractView {
   #oneWaypoint = null;
   #handleClick = null;
+  #offers = null;
+  #destinations = null;
 
-  constructor({oneWaypoint, onClick}) {
+  constructor({oneWaypoint, onClick, offers, destinations}) {
     super();
     this.#oneWaypoint = oneWaypoint;
     this.#handleClick = onClick;
+    this.#offers = offers;
+    this.#destinations = destinations;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
   get template() {
-    return createEventItemTemplate(this.#oneWaypoint);
+    return createEventItemTemplate(this.#oneWaypoint, this.#destinations, this.#offers);
   }
 
   #clickHandler = (evt) => {
