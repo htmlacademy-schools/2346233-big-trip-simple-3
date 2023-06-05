@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import {FilterType} from '../mock/consts';
+import {FilterType} from '../consts';
 
 const NoTasksTextType = {
   [FilterType.EVERYTHING]: 'Click New Event to create your first point',

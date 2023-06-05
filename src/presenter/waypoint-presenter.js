@@ -2,7 +2,7 @@ import {render, replace, remove} from '../framework/render';
 import EventItemtView from '../view/event-item';
 import EditingForm from '../view/edit-form';
 import {isDatesEqual, isEsc} from '../util';
-import {UpdateType, UserAction} from '../mock/consts';
+import {UpdateType, UserAction} from '../consts';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
