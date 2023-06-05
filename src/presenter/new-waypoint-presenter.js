@@ -4,7 +4,6 @@ import {UpdateType, UserAction} from '../consts';
 import EditingForm from '../view/edit-form';
 import {remove} from '../framework/render';
 import {isEsc} from '../util';
-import {nanoid} from 'nanoid';
 
 export default class NewWaypointPresenter {
   #handleDataChange = null;
@@ -37,6 +36,25 @@ export default class NewWaypointPresenter {
     document.body.addEventListener('keydown', this.#ecsKeyDownHandler);
   }
 
+  setSaving() {
+    this.#waypointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#waypointEditComponent.updateElement({
+        isDisabled: false,
+        isSavinf: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#waypointEditComponent.shake(resetFormState);
+  }
+
   destroy() {
     if (this.#waypointEditComponent === null) {
       return;
@@ -63,13 +81,16 @@ export default class NewWaypointPresenter {
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
 
-      {id: nanoid(), ...waypoint}
+      this.#deleteId(waypoint)
     );
-
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
     this.destroy();
+  };
+
+  #deleteId = (waypoint) => {
+    delete waypoint.id;
+    return waypoint;
   };
 }
