@@ -1,7 +1,7 @@
 import {render, RenderPosition} from '../render';
-import {UpdateType, UserAction} from '../mock/consts';
+import {UpdateType, UserAction} from '../consts';
 
-import EditForm from '../view/edit-form';
+import EditingForm from '../view/edit-form';
 import {remove} from '../framework/render';
 import {isEsc} from '../util';
 import {nanoid} from 'nanoid';
@@ -23,7 +23,7 @@ export default class NewWaypointPresenter {
       return;
     }
 
-    this.#waypointEditComponent = new EditForm({
+    this.#waypointEditComponent = new EditingForm({
       destinations: destinations,
       offers: offers,
       onSubmit: this.#handleFormSubmit,
