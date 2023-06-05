@@ -161,7 +161,14 @@ const cities = [
 
 const FilterType = {
   EVERYTHING: 'everything',
-  FUTURE: 'future'
+  FUTURE: 'future',
+  PAST: 'past'
+};
+
+const FilterTypeDescriptions = {
+  [FilterType.EVERYTHING]: 'EVERYTHING',
+  [FilterType.PAST]: 'PAST',
+  [FilterType.FUTURE]: 'FUTURE',
 };
 
 const SortType = {
@@ -171,5 +178,24 @@ const SortType = {
   PRICE: 'price',
   OFFER: 'offer'
 };
+const SortTypeDescription = {
+  [SortType.DAY]: 'Day',
+  [SortType.EVENT]: 'Event',
+  [SortType.TIME]: 'Time',
+  [SortType.PRICE]: 'Price',
+  [SortType.OFFER]: 'Offer'
+};
 
-export {pointTypes, variousDates, offersByType, descrText, cities, FilterType, SortType};
+const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export {pointTypes, variousDates, offersByType, descrText, cities, FilterType, SortType, UserAction, UpdateType, SortTypeDescription, FilterTypeDescriptions};

@@ -138,7 +138,7 @@ export default class EditingForm extends AbstractStatefulView {
   #isEditForm = null;
   #fromDatepicker = null;
   #toDatepicker = null;
-
+  #handleDeleteClick = null;
   #destinations = [];
   #offers = [];
 
@@ -161,7 +161,8 @@ export default class EditingForm extends AbstractStatefulView {
     destinations,
     isEditForm = true,
     onSubmit = () => (0),
-    onRollUpButton
+    onRollUpButton,
+    onDeleteClick
   }) {
     super();
     this._setState(EditingForm.parseWaypointToState(oneWaypoint, offers));
@@ -170,23 +171,22 @@ export default class EditingForm extends AbstractStatefulView {
     this.#isEditForm = isEditForm;
     this.#handleSubmit = onSubmit;
     this.#handleRollUp = onRollUpButton;
+    this.#handleDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
 
   }
 
   _restoreHandlers() {
-
-    if (this.#isEditForm) {
-      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollUpButtonHandler);
-    }
-
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#eventTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersHandler);
-
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+    if (this.#isEditForm) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollUpButtonHandler);
+    }
     this.#setFromDatePicker();
     this.#setToDatePicker();
 
@@ -292,7 +292,7 @@ export default class EditingForm extends AbstractStatefulView {
 
   #offersHandler = (evt) => {
     evt.preventDefault();
-    const clickedOfferId = this._state.curTypeOffers.find((offer) => offer.title.split(' ').at(0) === evt.target.name.split('-').at(-1)).id;
+    const clickedOfferId = Number(evt.target.name.split('-').at(-1));
     const newOffersIds = this._state.offersIDs.slice();
     if (newOffersIds.includes(clickedOfferId)) {
       newOffersIds.splice(newOffersIds.indexOf(clickedOfferId), 1);
@@ -302,5 +302,10 @@ export default class EditingForm extends AbstractStatefulView {
     this._setState({
       offersIDs: newOffersIds
     });
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(EditingForm.parseStateToWaypoint(this._state));
   };
 }
