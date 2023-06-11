@@ -61,13 +61,13 @@ function createEventTypeListTemplate(currentType, id) {
 }
 
 function createEditFormTemplate(isEditForm, oneWaypoint, offers, destinations) {
-  
+
   const itemDest = getItemFromItemsById(destinations, oneWaypoint.destination);
- if (!oneWaypoint.destination) {
+  if (!oneWaypoint.destination) {
     oneWaypoint.destination = destinations[0].id;
   }
   const curTypeOffers = offers.find((element) => element.type === oneWaypoint.type).offers;
-  
+
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
