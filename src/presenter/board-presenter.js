@@ -1,13 +1,13 @@
 import Sorting from '../view/sorting';
 import EventList from '../view/event-list';
-import NoWaypointMessage from '../view/no-waypoints';
+import NoWaypointMessage from '../view/no-waypoint-message';
 import {remove, render, RenderPosition} from '../framework/render';
 import WaypointPresenter from './waypoint-presenter';
 import {FilterType, SortType, UpdateType, UserAction} from '../consts';
 import {sorts} from '../sort';
 import {filter} from '../util';
 import NewWaypointPresenter from './new-waypoint-presenter';
-import LoadingView from '../view/loading';
+import LoadingView from '../view/loading-view';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 const TimeLimit = {

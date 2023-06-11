@@ -1,6 +1,6 @@
 import {render, replace, remove} from '../framework/render';
-import EventItemtView from '../view/event-item';
-import EditingForm from '../view/edit-form';
+import EventItemtView from '../view/event-item-view';
+import EditForm from '../view/edit-form';
 import {isDatesEqual, isEsc} from '../util';
 import {UpdateType, UserAction} from '../consts';
 
@@ -43,7 +43,7 @@ export default class WaypointPresenter {
       destinations: this.#destinations,
     });
 
-    this.#editFormComponent = new EditingForm({
+    this.#editFormComponent = new EditForm({
       oneWaypoint: waypoint,
       onSubmit: this.#handleFormSubmit,
       offers: this.#offers,
