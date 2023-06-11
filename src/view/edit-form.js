@@ -61,8 +61,13 @@ function createEventTypeListTemplate(currentType, id) {
 }
 
 function createEditFormTemplate(isEditForm, oneWaypoint, offers, destinations) {
+  
   const itemDest = getItemFromItemsById(destinations, oneWaypoint.destination);
+ if (!oneWaypoint.destination) {
+    oneWaypoint.destination = destinations[0].id;
+  }
   const curTypeOffers = offers.find((element) => element.type === oneWaypoint.type).offers;
+  
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -140,7 +145,7 @@ function createEditFormTemplate(isEditForm, oneWaypoint, offers, destinations) {
   );
 }
 
-export default class EditingForm extends AbstractStatefulView {
+export default class EditForm extends AbstractStatefulView {
   #handleRollUp = null;
   #handleSubmit = null;
   #isEditForm = null;
@@ -179,7 +184,7 @@ export default class EditingForm extends AbstractStatefulView {
     onDeleteClick
   }) {
     super();
-    this._setState(EditingForm.parseWaypointToState(oneWaypoint, offers));
+    this._setState(EditForm.parseWaypointToState(oneWaypoint, offers));
     this.#offers = offers;
     this.#destinations = destinations;
     this.#isEditForm = isEditForm;
@@ -222,7 +227,7 @@ export default class EditingForm extends AbstractStatefulView {
 
   reset(waypoint) {
     this.updateElement(
-      EditingForm.parseWaypointToState(waypoint, this.#offers),
+      EditForm.parseWaypointToState(waypoint, this.#offers),
     );
   }
 
@@ -233,7 +238,7 @@ export default class EditingForm extends AbstractStatefulView {
 
   #submitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleSubmit(EditingForm.parseStateToWaypoint(this._state));
+    this.#handleSubmit(EditForm.parseStateToWaypoint(this._state));
   };
 
   #rollUpButtonHandler = (evt) => {
@@ -323,6 +328,6 @@ export default class EditingForm extends AbstractStatefulView {
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(EditingForm.parseStateToWaypoint(this._state));
+    this.#handleDeleteClick(EditForm.parseStateToWaypoint(this._state));
   };
 }
